@@ -45,7 +45,8 @@ Algorithm:
     def interp_linear(self,olons,olats,data):
         """
 given a triangulation, perform linear interpolation on
-points olons,olats (in radians), return result in data."""
+oints olons,olats (in radians), return result in data.
+olons, olats can be 1d or 2d (output data array has same shape as olats,lons)"""
         shapeout = olons.shape
         if len(shapeout) not in [1,2]:
             raise ValueError('olons,olats must be 1d or 2d')
@@ -67,7 +68,8 @@ points olons,olats (in radians), return result in data."""
     def interp_cubic(self,olons,olats,data):
         """
 given a triangulation, perform hermite cubic interpolation on
-points olons,olats (in radians), return result in data."""
+points olons,olats (in radians), return result in data.
+olons, olats can be 1d or 2d (output data array has same shape as olats,lons)"""
         shapeout = olons.shape
         if len(shapeout) not in [1,2]:
             raise ValueError('olons,olats must be 1d or 2d')
@@ -89,7 +91,8 @@ points olons,olats (in radians), return result in data."""
     def interp_nn(self,olons,olats,data):
         """
 given a triangulation, perform nearest neighbor interpolation on
-points olons,olats (in radians), return result in data."""
+points olons,olats (in radians), return result in data.
+olons, olats can be 1d or 2d (output data array has same shape as olats,lons)"""
         shapeout = olons.shape
         if len(shapeout) not in [1,2]:
             raise ValueError('olons,olats must be 1d or 2d')
