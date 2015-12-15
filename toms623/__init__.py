@@ -1,6 +1,13 @@
 import _toms623
 import numpy as np
 
+# Performs a triangulation, then interpolates within
+# each triangle.
+# Algorithm:
+# R. J. Renka, "ALGORITHM 623:  Interpolation on the Surface of a
+# Sphere", ACM Trans. Math. Software, Vol. 10, No. 4, December 1984,
+# pp. 437-439.
+
 class trintrp(object):
     def __init__(self, lons, lats,reorder = None):
         # given mesh points (lons,lats in radians)
