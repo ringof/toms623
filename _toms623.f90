@@ -5240,6 +5240,30 @@
       IF (IFLAG .NE. 1) RETURN
       RETURN
       END
+      subroutine intrpc1_n(npts,nptso,olats,olons,x,y,z,datain,iadj,&
+                           iend,odata,ierr)
+      integer, intent(in) :: npts, nptso
+      integer, intent(out) :: ierr
+      double precision, intent(in), dimension(nptso) :: olats,olons
+      double precision, intent(in), dimension(npts) :: datain,x,y,z
+      double precision, intent(out), dimension(nptso) :: odata
+      double precision, dimension(3,nptso) :: grad
+      integer, intent(in), dimension(npts) :: iend
+      integer, intent(in), dimension(6*(npts-1)) :: iadj
+      integer n,ierr1,ist
+      ist = 1
+      ierr = 0
+      do n=1,nptso
+         call intrc1(npts,olats(n),olons(n),x,y,z,datain,iadj,iend,&
+                     0,grad,ist,odata(n),ierr1)
+         if (ierr1 .ne. 0) then
+           !print *,n,'warning: ierr = ',ierr1,' in intrc1_n'
+           !print *,olats(n), olons(n), npts
+           !stop
+           ierr = ierr + ierr1
+         endif
+      enddo
+      end subroutine intrpc1_n
       subroutine intrpc0_n(npts,nptso,olats,olons,x,y,z,datain,iadj,&
                            iend,odata,ierr)
       integer, intent(in) :: npts, nptso

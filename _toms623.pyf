@@ -118,6 +118,15 @@ python module _toms623 ! in
             double precision dimension(3) :: g
             integer :: ier
         end subroutine gradl
+      subroutine intrpc1_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+         integer, intent(in) :: npts, nptso
+         integer, intent(out) :: ierr
+         double precision, intent(in), dimension(nptso) :: olats,olons
+         double precision, intent(in), dimension(npts) :: x,y,z,data
+         double precision, intent(out), dimension(nptso) :: odata
+         integer, intent(in), dimension(npts) :: iend
+         integer, intent(in), dimension(6*(npts-1)) :: iadj
+      end subroutine intrpc1_n
       subroutine intrpc0_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
          integer, intent(in) :: npts, nptso
          integer, intent(out) :: ierr
