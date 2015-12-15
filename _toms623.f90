@@ -5256,9 +5256,9 @@
          call intrc0(npts,olats(n),olons(n),x,y,z,datain,iadj,iend,&
                      ist,odata(n),ierr1)
          if (ierr1 .ne. 0) then
-           print *,n,'warning: ierr = ',ierr1,' in intrc0_n'
-           print *,olats(n), olons(n), npts
-           stop
+           !print *,n,'warning: ierr = ',ierr1,' in intrc0_n'
+           !print *,olats(n), olons(n), npts
+           !stop
            ierr = ierr + ierr1
          endif
       enddo
@@ -5279,9 +5279,9 @@
          call intrnn(npts,olats(n),olons(n),x,y,z,datain,iadj,iend,&
                      ist,odata(n),ierr1)
          if (ierr1 .ne. 0) then
-           print *,n,'warning: ierr = ',ierr1,' in intrc0_n'
-           print *,olats(n), olons(n), npts
-           stop
+           !print *,n,'warning: ierr = ',ierr1,' in intrc0_n'
+           !print *,olats(n), olons(n), npts
+           !stop
            ierr = ierr + ierr1
          endif
       enddo

@@ -59,7 +59,7 @@ class trintrp(object):
                      self.x, self.y, self.z, data_reordered,\
                      self.iadj,self.iend,self.npts,nptso)
         if ierr != 0:
-            print 'warning: ierr = %s in trmesh' % ierr
+            raise ValueError('ierr = %s in trmesh' % ierr)
         return odata.reshape(shapeout)
     def interp_nn(self,olons,olats,data):
         # given a triangulation, perform interpolation on
@@ -84,6 +84,5 @@ class trintrp(object):
                      self.x, self.y, self.z, data_reordered,\
                      self.iadj,self.iend,self.npts,nptso)
         if ierr != 0:
-            #raise ValueError('warning: ierr = %s in trmesh' % ierr)
-            print 'warning: ierr = %s in trmesh' % ierr
+            raise ValueError('ierr = %s in trmesh' % ierr)
         return odata.reshape(shapeout)
