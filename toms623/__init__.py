@@ -7,7 +7,9 @@ class trintrp(object):
 given mesh points (lons,lats in radians) define triangulation.
 n is size of input mesh (length of 1-d arrays lons and lats).
 triangulation can sometimes be sped up be re-ordering mesh coordinates
-using reorder kwarg (options are 'lon','lat', and None (default).
+using reorder kwarg (options are 'lon','lat', and None (default)).
+reorder='lat' causes lon,lat pairs to be reordered by increasing
+latitude before triangulation is computed.
 
 Algorithm:
  R. J. Renka, "ALGORITHM 623:  Interpolation on the Surface of a
