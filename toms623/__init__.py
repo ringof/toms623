@@ -38,7 +38,7 @@ Algorithm:
         # create the triangulation.
         iadj,iend,ierr = _toms623.trmesh(x,y,z,npts)
         if ierr != 0:
-            raise ValueError('warning: ierr = %s in trmesh' % ierr)
+            raise ValueError('ierr = %s in trmesh' % ierr)
         self.lons = lons; self.lats = lats; self.npts = npts
         self.x = x; self.y = y; self.z = z
         self.iadj = iadj; self.iend = iend
