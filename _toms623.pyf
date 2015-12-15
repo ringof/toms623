@@ -1,0 +1,358 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _toms623 ! in 
+    interface  ! in :renka_algorithm623
+        subroutine adnode(kk,x,y,z,iadj,iend,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=kk),depend(x) :: kk=len(x)
+            double precision dimension(kk) :: x
+            double precision dimension(kk),depend(kk) :: y
+            double precision dimension(kk),depend(kk) :: z
+            integer dimension(1) :: iadj
+            integer dimension(kk),depend(kk) :: iend
+            integer :: ier
+        end subroutine adnode
+        subroutine aplyr(x,y,z,cx,sx,cy,sy,xp,yp,zp) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision :: x
+            double precision :: y
+            double precision :: z
+            double precision :: cx
+            double precision :: sx
+            double precision :: cy
+            double precision :: sy
+            double precision :: xp
+            double precision :: yp
+            double precision :: zp
+        end subroutine aplyr
+        subroutine aplyrt(g1p,g2p,cx,sx,cy,sy,g) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision :: g1p
+            double precision :: g2p
+            double precision :: cx
+            double precision :: sx
+            double precision :: cy
+            double precision :: sy
+            double precision dimension(3) :: g
+        end subroutine aplyrt
+        subroutine arcint(p,p1,p2,w1,w2,g1,g2,w,g,gn) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision dimension(3) :: p
+            double precision dimension(3) :: p1
+            double precision dimension(3) :: p2
+            double precision :: w1
+            double precision :: w2
+            double precision dimension(3) :: g1
+            double precision dimension(3) :: g2
+            double precision :: w
+            double precision dimension(3) :: g
+            double precision :: gn
+        end subroutine arcint
+        function arclen(p,q) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision dimension(3) :: p
+            double precision dimension(3) :: q
+            double precision :: arclen
+        end function arclen
+        subroutine bdyadd(kk,i1,i2,iadj,iend) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(iend)>=kk),depend(iend) :: kk=len(iend)
+            integer :: i1
+            integer :: i2
+            integer dimension(1) :: iadj
+            integer dimension(kk) :: iend
+        end subroutine bdyadd
+        subroutine bnodes(n,iadj,iend,nb,na,nt,nodes) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(iend)>=n),depend(iend) :: n=len(iend)
+            integer dimension(1) :: iadj
+            integer dimension(n) :: iend
+            integer :: nb
+            integer :: na
+            integer :: nt
+            integer dimension(1) :: nodes
+        end subroutine bnodes
+        subroutine circle(n,x,y) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            double precision dimension(n) :: x
+            double precision dimension(n),depend(n) :: y
+        end subroutine circle
+        subroutine constr(xk,yk,zk,cx,sx,cy,sy) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision :: xk
+            double precision :: yk
+            double precision :: zk
+            double precision :: cx
+            double precision :: sx
+            double precision :: cy
+            double precision :: sy
+        end subroutine constr
+        subroutine covsph(kk,node,iadj,iend) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(iend)>=kk),depend(iend) :: kk=len(iend)
+            integer :: node
+            integer dimension(1) :: iadj
+            integer dimension(kk) :: iend
+        end subroutine covsph
+        subroutine edge(in1,in2,x,y,z,lwk,iwk,iadj,iend,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer :: in1
+            integer :: in2
+            double precision dimension(1) :: x
+            double precision dimension(1) :: y
+            double precision dimension(1) :: z
+            integer :: lwk
+            integer dimension(2,1) :: iwk
+            integer dimension(1) :: iadj
+            integer dimension(1) :: iend
+            integer :: ier
+        end subroutine edge
+        subroutine getnp(x,y,z,iadj,iend,l,npts,df,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision dimension(1) :: x
+            double precision dimension(1) :: y
+            double precision dimension(1) :: z
+            integer dimension(1) :: iadj
+            integer dimension(1) :: iend
+            integer, optional,check(len(npts)>=l),depend(npts) :: l=len(npts)
+            integer dimension(l) :: npts
+            double precision :: df
+            integer :: ier
+        end subroutine getnp
+        subroutine givens(a,b,c,s) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision :: a
+            double precision :: b
+            double precision :: c
+            double precision :: s
+        end subroutine givens
+        subroutine intadd(kk,i1,i2,i3,iadj,iend) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(iend)>=kk),depend(iend) :: kk=len(iend)
+            integer :: i1
+            integer :: i2
+            integer :: i3
+            integer dimension(1) :: iadj
+            integer dimension(kk) :: iend
+        end subroutine intadd
+        subroutine intrnn(n,plat,plon,x,y,z,w,iadj,iend,ist,pw,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            double precision :: plat
+            double precision :: plon
+            double precision dimension(n) :: x
+            double precision dimension(n),depend(n) :: y
+            double precision dimension(n),depend(n) :: z
+            double precision dimension(n),depend(n) :: w
+            integer dimension(1) :: iadj
+            integer dimension(n),depend(n) :: iend
+            integer :: ist
+            double precision :: pw
+            integer :: ier
+        end subroutine intrnn
+        subroutine intrc0(n,plat,plon,x,y,z,w,iadj,iend,ist,pw,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            double precision :: plat
+            double precision :: plon
+            double precision dimension(n) :: x
+            double precision dimension(n),depend(n) :: y
+            double precision dimension(n),depend(n) :: z
+            double precision dimension(n),depend(n) :: w
+            integer dimension(1) :: iadj
+            integer dimension(n),depend(n) :: iend
+            integer :: ist
+            double precision :: pw
+            integer :: ier
+        end subroutine intrc0
+        subroutine intrc1(n,plat,plon,x,y,z,w,iadj,iend,iflag,grad,ist,pw,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            double precision :: plat
+            double precision :: plon
+            double precision dimension(n) :: x
+            double precision dimension(n),depend(n) :: y
+            double precision dimension(n),depend(n) :: z
+            double precision dimension(n),depend(n) :: w
+            integer dimension(1) :: iadj
+            integer dimension(n),depend(n) :: iend
+            integer :: iflag
+            double precision dimension(3,n),depend(n) :: grad
+            integer :: ist
+            double precision :: pw
+            integer :: ier
+        end subroutine intrc1
+        subroutine permut(n,ip,a) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(ip)>=n),depend(ip) :: n=len(ip)
+            integer dimension(n) :: ip
+            double precision dimension(n),depend(n) :: a
+        end subroutine permut
+        subroutine prjct(px,py,pz,ox,oy,oz,ex,ey,ez,vx,vy,vz,isw,x,y,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision :: px
+            double precision :: py
+            double precision :: pz
+            double precision :: ox
+            double precision :: oy
+            double precision :: oz
+            double precision :: ex
+            double precision :: ey
+            double precision :: ez
+            double precision :: vx
+            double precision :: vy
+            double precision :: vz
+            integer :: isw
+            double precision :: x
+            double precision :: y
+            integer :: ier
+            double precision :: xe
+            double precision :: ye
+            double precision :: ze
+            double precision :: xoe
+            double precision :: yoe
+            double precision :: zoe
+            double precision :: oes
+            double precision :: xv
+            double precision :: yv
+            double precision :: zv
+            double precision :: xh
+            double precision :: yh
+            double precision :: zh
+            common /procom/ xe,ye,ze,xoe,yoe,zoe,oes,xv,yv,zv,xh,yh,zh
+        end subroutine prjct
+        subroutine qsort(n,x,ind) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            double precision dimension(n) :: x
+            integer dimension(n),depend(n) :: ind
+        end subroutine qsort
+        subroutine reordr(n,iflag,a,b,c,d,ind) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, intent(in) :: n
+            integer, intent(in) :: iflag
+            double precision dimension(n), intent(inout) :: a
+            double precision dimension(n), intent(inout) :: b
+            double precision dimension(n), intent(inout) :: c
+            double precision dimension(n), intent(inout) :: d
+            integer dimension(n), intent(out) :: ind
+        end subroutine reordr
+        subroutine rotate(n,c,s,x,y) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            double precision :: c
+            double precision :: s
+            double precision dimension(n) :: x
+            double precision dimension(n),depend(n) :: y
+        end subroutine rotate
+        subroutine setup(xi,yi,wi,wk,s1,s2,wt,row) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision :: xi
+            double precision :: yi
+            double precision :: wi
+            double precision :: wk
+            double precision :: s1
+            double precision :: s2
+            double precision :: wt
+            double precision dimension(6) :: row
+        end subroutine setup
+        subroutine shiftd(nfrst,nlast,kk,iarr) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer :: nfrst
+            integer :: nlast
+            integer :: kk
+            integer dimension(1) :: iarr
+        end subroutine shiftd
+        subroutine swap(nin1,nin2,nout1,nout2,iadj,iend) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer :: nin1
+            integer :: nin2
+            integer :: nout1
+            integer :: nout2
+            integer dimension(1) :: iadj
+            integer dimension(1) :: iend
+        end subroutine swap
+        function swptst(n1,n2,n3,n4,x,y,z) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer :: n1
+            integer :: n2
+            integer :: n3
+            integer :: n4
+            double precision dimension(1) :: x
+            double precision dimension(1) :: y
+            double precision dimension(1) :: z
+            logical :: swptst
+        end function swptst
+        subroutine trans(n,rlat,rlon,x,y,z) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, intent(in) :: n
+            double precision dimension(n), intent(in) :: rlat
+            double precision dimension(n), intent(in) :: rlon
+            double precision dimension(n), intent(out) :: x
+            double precision dimension(n), intent(out) :: y
+            double precision dimension(n), intent(out) :: z
+        end subroutine trans
+        subroutine trfind(nst,p,x,y,z,iadj,iend,b1,b2,b3,i1,i2,i3) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer :: nst
+            double precision dimension(3) :: p
+            double precision dimension(1) :: x
+            double precision dimension(1) :: y
+            double precision dimension(1) :: z
+            integer dimension(1) :: iadj
+            integer dimension(1) :: iend
+            double precision :: b1
+            double precision :: b2
+            double precision :: b3
+            integer :: i1
+            integer :: i2
+            integer :: i3
+        end subroutine trfind
+        subroutine trmesh(n,x,y,z,iadj,iend,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, intent(in) :: n
+            double precision dimension(n), intent(in) :: x
+            double precision dimension(n), intent(in) :: y
+            double precision dimension(n), intent(in) :: z
+            integer dimension(6*(n-1)), intent(out) :: iadj
+            integer dimension(n), intent(out) :: iend
+            integer, intent(out) :: ier
+        end subroutine trmesh
+        subroutine gradg(n,x,y,z,w,iadj,iend,eps,nit,grad,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            double precision dimension(n) :: x
+            double precision dimension(n),depend(n) :: y
+            double precision dimension(n),depend(n) :: z
+            double precision dimension(n),depend(n) :: w
+            integer dimension(1) :: iadj
+            integer dimension(n),depend(n) :: iend
+            double precision :: eps
+            integer :: nit
+            double precision dimension(3,n),depend(n) :: grad
+            integer :: ier
+        end subroutine gradg
+        subroutine gradl(n,k,x,y,z,w,iadj,iend,g,ier) ! in :renka_algorithm623:renka_algorithm623.f90
+            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
+            integer :: k
+            double precision dimension(n) :: x
+            double precision dimension(n),depend(n) :: y
+            double precision dimension(n),depend(n) :: z
+            double precision dimension(n),depend(n) :: w
+            integer dimension(1) :: iadj
+            integer dimension(n),depend(n) :: iend
+            double precision dimension(3) :: g
+            integer :: ier
+        end subroutine gradl
+        subroutine wval(b1,b2,b3,v1,v2,v3,w1,w2,w3,g1,g2,g3,iflag,pw,pg) ! in :renka_algorithm623:renka_algorithm623.f90
+            double precision :: b1
+            double precision :: b2
+            double precision :: b3
+            double precision dimension(3) :: v1
+            double precision dimension(3) :: v2
+            double precision dimension(3) :: v3
+            double precision :: w1
+            double precision :: w2
+            double precision :: w3
+            double precision dimension(3) :: g1
+            double precision dimension(3) :: g2
+            double precision dimension(3) :: g3
+            integer :: iflag
+            double precision :: pw
+            double precision dimension(3) :: pg
+        end subroutine wval
+      subroutine intrpc0_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+         integer, intent(in) :: npts, nptso
+         integer, intent(out) :: ierr
+         double precision, intent(in), dimension(nptso) :: olats,olons
+         double precision, intent(in), dimension(npts) :: x,y,z,data
+         double precision, intent(out), dimension(nptso) :: odata
+         integer, intent(in), dimension(npts) :: iend
+         integer, intent(in), dimension(6*(npts-1)) :: iadj
+      end subroutine intrpc0_n
+      subroutine intrpnn_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+         integer, intent(in) :: npts, nptso
+         integer, intent(out) :: ierr
+         double precision, intent(in), dimension(nptso) :: olats,olons
+         double precision, intent(in), dimension(npts) :: x,y,z,data
+         double precision, intent(out), dimension(nptso) :: odata
+         integer, intent(in), dimension(npts) :: iend
+         integer, intent(in), dimension(6*(npts-1)) :: iadj
+      end subroutine intrpnn_n
+    end interface 
+end python module renka_algorithm623
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
