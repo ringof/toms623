@@ -21,9 +21,10 @@ lons = mesh_nc.variables['lonCell'][:]
 print 'min/max lons:',lons.min(), lons.max()
 
 # fake test data.
-nexp = 8
-icos_data = np.cos(nexp*lons)*np.sin(0.5*lons)**nexp*np.cos(lats)**nexp +\
-np.sin(lats)**nexp
+def test_func(lon, lat):
+    nexp = 8
+    return np.cos(nexp*lon)*np.sin(0.5*lon)**nexp*np.cos(lat)**nexp+np.sin(lat)**nexp
+icos_data = test_func(lons,lats)
 
 t1 = time.clock()
 print 'triangulation of', len(lons),' points'
@@ -41,8 +42,7 @@ t1 = time.clock()
 latlon_data = tri.interp(olons,olats,icos_data,order=1)
 print 'interpolation took',time.clock()-t1,' secs'
 
-latlon_datax = np.cos(nexp*olons)*np.sin(0.5*olons)**nexp*np.cos(olats)**nexp +\
-np.sin(olats)**nexp
+latlon_datax = test_func(olons,olats)
 print 'max abs error:',(np.abs(latlon_datax-latlon_data)).max()
 print 'min/max field:',latlon_data.min(), latlon_datax.max()
 
