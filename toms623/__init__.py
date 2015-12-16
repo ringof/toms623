@@ -150,7 +150,7 @@ given a triangulation, perform interpolation on
 oints olons,olats (in radians), return result in data.
 olons, olats can be 1d or 2d (output data array has same shape as olats,lons).
 order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
-1 (linear), or 3 (hermite cubic). Default is linear."""
+1 (linear), or 3 (hermite cubic, no tension). Default is linear."""
         shapeout = olons.shape
         if len(shapeout) not in [1,2]:
             raise ValueError('olons,olats must be 1d or 2d')
