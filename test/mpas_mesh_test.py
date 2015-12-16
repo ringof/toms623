@@ -1,5 +1,9 @@
-import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
+try:
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.basemap import Basemap
+    has_matplotlib = True
+except:
+    has_matplotlib = False
 from netCDF4 import Dataset
 import numpy as np
 from toms623 import trintrp
@@ -43,9 +47,21 @@ print 'max abs error:',(np.abs(latlon_datax-latlon_data)).max()
 print 'min/max field:',latlon_data.min(), latlon_datax.max()
 
 # make plot on output mesh
-m = Basemap(projection='ortho',lon_0=180,lat_0=20)
-x,y = m(np.degrees(olons), np.degrees(olats))
-m.drawcoastlines()
-m.drawmapboundary()
-m.contourf(x,y,latlon_data,15)
-plt.show()
+if has_matplotlib:
+    fig = plt.figure(figsize=(12,6))
+    fig.add_subplot(1,2,1)
+    m = Basemap(projection='ortho',lon_0=180,lat_0=20)
+    x,y = m(np.degrees(olons), np.degrees(olats))
+    m.drawcoastlines()
+    m.drawmapboundary()
+    m.contourf(x,y,latlon_data,15)
+    plt.title('interpolated field')
+    m.colorbar()
+    fig.add_subplot(1,2,2)
+    m.drawcoastlines()
+    m.drawmapboundary()
+    m.contourf(x,y,latlon_data-latlon_datax,15)
+    plt.title('error')
+    m.colorbar()
+    plt.tight_layout()
+    plt.show()
