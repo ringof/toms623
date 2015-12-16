@@ -1751,6 +1751,7 @@
 ! DNP,DNB =  NEGATIVE COSINES OF THE ANGULAR DISTANCES FROM
 !              N1 TO NP AND TO NB, RESPECTIVELY
 !
+      NP = 0
       LM1 = L - 1
       IF (LM1 .LT. 1) GO TO 4
       IER = 0
@@ -2122,9 +2123,9 @@
 !
 !***********************************************************
 !
-      INTEGER I1, I2, I3, N1, N2, INDX, I(1)
-      DOUBLE PRECISION    P(3), P1(3), P2(3), P3(3), B1, B2, B3, SUM, &
-              S12, PTN1, PTN2, DIST(3), ARCLEN
+      INTEGER I1, I2, I3, I(1)
+      DOUBLE PRECISION    P(3), P1(3), P2(3), P3(3), B1,B2,B3, &
+              DIST(3), ARCLEN
 !
       IF (N .LT. 3  .OR.  IST .LT. 1  .OR.  IST .GT. N) &
           GO TO 5
@@ -2257,7 +2258,7 @@
 !***********************************************************
 !
       INTEGER I1, I2, I3, N1, N2, INDX
-      DOUBLE PRECISION    P(3), P1(3), P2(3), P3(3), B1, B2, B3, SUM, &
+      DOUBLE PRECISION    P(3), P1(3), P2(3), P3(3), B1,B2,B3,SUMM,&
               S12, PTN1, PTN2
 !
 ! LOCAL PARAMETERS -
@@ -2274,7 +2275,7 @@
 !              UNDERLYING LINE SEGMENT N1-N2 WHEN P IS
 !              EXTERIOR -- UNNORMALIZED COORDINATES ARE
 !              COMPUTED BY TRFIND WHEN P IS IN A TRIANGLE
-! SUM =      QUANTITY USED TO NORMALIZE THE BARYCENTRIC
+! SUMM =     QUANTITY USED TO NORMALIZE THE BARYCENTRIC
 !              COORDINATES
 ! S12 =      SCALAR PRODUCT (N1,N2)
 ! PTN1 =     SCALAR PRODUCT (P,N1)
@@ -2311,10 +2312,10 @@
 !
 ! NORMALIZE THE BARYCENTRIC COORDINATES
 !
-      SUM = B1 + B2 + B3
-      B1 = B1/SUM
-      B2 = B2/SUM
-      B3 = B3/SUM
+      SUMM = B1 + B2 + B3
+      B1 = B1/SUMM
+      B2 = B2/SUMM
+      B3 = B3/SUMM
       PW = B1*W(I1) + B2*W(I2) + B3*W(I3)
       IER = 0
       RETURN
@@ -2393,8 +2394,8 @@
 !   N1->(N2 X N1).  THUS Q LIES ON THE INTERIOR OF N1->N2.
 !   NORMALIZE THE COORDINATES AND COMPUTE PW.
 !
-    4 SUM = B1 + B2
-      PW = (B1*W(N1) + B2*W(N2))/SUM
+    4 SUMM = B1 + B2
+      PW = (B1*W(N1) + B2*W(N2))/SUMM
       IER = 1
       RETURN
 !
@@ -2517,7 +2518,7 @@
 !
       INTEGER NN, I1, I2, I3, I, IERR, N1, N2, INDX
       DOUBLE PRECISION    P(3), P1(3), P2(3), P3(3), W1, W2, W3, G1(3), &
-              G2(3), G3(3), B1, B2, B3, SUM, DUM(3), S12, &
+              G2(3), G3(3), B1, B2, B3, SUMM, DUM(3), S12, &
               PTN1, PTN2, Q(3), QNORM, WQ, GQ(3), A, PTGQ, &
               GQN, ARCLEN
 !
@@ -2546,8 +2547,8 @@
 !              UNDERLYING LINE SEGMENT N1-N2 WHEN P IS
 !              EXTERIOR -- UNNORMALIZED COORDINATES ARE
 !              COMPUTED BY TRFIND WHEN P IS IN A TRIANGLE
-! SUM =      QUANTITY USED TO NORMALIZE THE BARYCENTRIC
-!              COORDINATES
+! SUMM =     QUANTITY USED TO NORMALIZE THE BARYCENTRIC
+!             COORDINATES
 ! DUM =      DUMMY PARAMETER FOR WVAL AND ARCINT
 ! S12 =      SCALAR PRODUCT (N1,N2) -- FACTOR OF B1 AND B2
 ! PTN1 =     SCALAR PRODUCT (P,N1) -- FACTOR OF B1 AND B2
@@ -2615,10 +2616,10 @@
 !
 ! NORMALIZE THE COORDINATES
 !
-    3 SUM = B1 + B2 + B3
-      B1 = B1/SUM
-      B2 = B2/SUM
-      B3 = B3/SUM
+    3 SUMM = B1 + B2 + B3
+      B1 = B1/SUMM
+      B2 = B2/SUMM
+      B3 = B3/SUMM
       CALL WVAL(B1,B2,B3,P1,P2,P3,W1,W2,W3,G1,G2,G3,0, PW, &
                 DUM)
       IER = 0
@@ -2851,187 +2852,6 @@
 !
     5 DO 6 K = 1,NN
     6   IP(K) = -IP(K)
-      RETURN
-      END
-      SUBROUTINE PRJCT (PX,PY,PZ,OX,OY,OZ,EX,EY,EZ, &
-                        VX,VY,VZ, ISW, X,Y,IER)
-      INTEGER ISW, IER
-      DOUBLE PRECISION    PX, PY, PZ, OX, OY, OZ, EX, EY, EZ, VX, VY, &
-              VZ, X, Y
-!
-!***********************************************************
-!
-!                                               ROBERT RENKA
-!                                       OAK RIDGE NATL. LAB.
-!                                             (615) 576-5139
-!
-!   THIS SUBROUTINE PROJECTS A POINT P ONTO THE PLANE CON-
-! TAINING POINT O WHOSE NORMAL IS THE LINE CONTAINING O AND
-! E WHERE P, O, AND E ARE POINTS IN EUCLIDEAN 3-SPACE.
-!
-! INPUT PARAMETERS - PX,PY,PZ - CARTESIAN COORDINATES OF THE
-!                               POINT P TO BE MAPPED ONTO
-!                               THE PLANE.
-!
-!                    OX,OY,OZ - COORDINATES OF O (THE ORIGIN
-!                               OF A COORDINATE SYSTEM IN
-!                               THE PLANE OF PROJECTION).
-!
-!                    EX,EY,EZ - COORDINATES OF THE EYE-POSI-
-!                               TION E DEFINING THE NORMAL
-!                               TO THE PLANE AND THE LINE OF
-!                               SIGHT FOR THE PROJECTION.  E
-!                               MUST NOT COINCIDE WITH O OR
-!                               P, AND THE ANGLE BETWEEN THE
-!                               VECTORS O-E AND P-E MUST BE
-!                               LESS THAN 90 DEGREES.  NOTE
-!                               THAT E AND P MAY LIE ON OP-
-!                               POSITE SIDES OF THE PLANE.
-!
-!                    VX,VY,VZ - COORDINATES OF A POINT V
-!                               WHICH DEFINES THE POSITIVE
-!                               Y-AXIS OF AN X-Y COORDINATE
-!                               SYSTEM IN THE PLANE AS THE
-!                               HALF-LINE CONTAINING O AND
-!                               THE PROJECTION OF O+V ONTO
-!                               THE PLANE.  THE POSITIVE X-
-!                               AXIS HAS DIRECTION DEFINED
-!                               BY THE CROSS PRODUCT V X
-!                               E-O.
-!
-! THE ABOVE PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
-!
-!                         ISW - SWITCH WHICH MUST BE SET TO
-!                               1 ON THE FIRST CALL AND WHEN
-!                               THE VALUES OF OX,OY,OZ,EX,
-!                               EY,EZ,VX,VY, OR VZ HAVE BEEN
-!                               ALTERED SINCE A PREVIOUS
-!                               CALL.  IF ISW .NE. 1, IT IS
-!                               ASSUMED THAT ONLY THE COORD-
-!                               INATES OF P HAVE CHANGED
-!                               SINCE A PREVIOUS CALL.  PRE-
-!                               VIOUSLY STORED QUANTITIES
-!                               ARE USED FOR INCREASED EFF-
-!                               ICIENCY IN THIS CASE.
-!
-! OUTPUT PARAMETERS - ISW - RESET TO 0 IF PRJCT WAS CALLED
-!                           WITH ISW = 1, UNCHANGED OTHER-
-!                           WISE.
-!
-!                     X,Y - COORDINATES OF THE POINT IN THE
-!                           PLANE WHICH LIES ON THE LINE
-!                           CONTAINING E AND P.  THE COORD-
-!                           INATE SYSTEM IS DEFINED BY VX,
-!                           VY, AND VZ.  X AND Y ARE NOT
-!                           CHANGED IF IER .NE. 0.
-!
-!                     IER - ERROR INDICATOR
-!                           IER = 0 IF NO ERRORS WERE
-!                                   ENCOUNTERED.
-!                           IER = 1 IF THE INNER PRODUCT OF
-!                                   O-E WITH P-E IS NOT POS-
-!                                   ITIVE IMPLYING THAT E IS
-!                                   TOO CLOSE TO THE PLANE.
-!                           IER = 2 IF O, E, AND O+V ARE
-!                                   COLLINEAR.  SEE THE DES-
-!                                   CRIPTION OF VX,VY,VZ.
-!
-! MODULES REFERENCED BY PRJCT - NONE
-!
-! INTRINSIC FUNCTION CALLED BY PRJCT - SQRT
-!
-!***********************************************************
-!
-      DOUBLE PRECISION XE, YE, ZE, XOE, YOE, ZOE, OES, S, XV, YV, ZV, &
-           SC, XH, YH, ZH, XEP, YEP, ZEP, XW, YW, ZW,&
-           OEX, OEY, OEZ
-      COMMON/PROCOM/XE, YE, ZE, XOE, YOE, ZOE, OES, &
-                    XV, YV, ZV, XH, YH, ZH
-!
-! LOCAL PARAMETERS -
-!
-! XE,YE,ZE =    LOCAL COPIES OF EX, EY, EZ
-! XOE,YOE,ZOE = COMPONENTS OF THE VECTOR OE FROM O TO E
-! OES =         NORM SQUARED OF OE -- (OE,OE)
-! S =           SCALE FACTOR FOR COMPUTING PROJECTIONS
-! XV,YV,ZV =    COMPONENTS OF A UNIT VECTOR VN DEFINING THE
-!                 POSITIVE Y-AXIS IN THE PLANE
-! SC =          SCALE FACTOR FOR NORMALIZING VN AND HN
-! XH,YH,ZH =    COMPONENTS OF A UNIT VECTOR HN DEFINING THE
-!                 POSITIVE X-AXIS IN THE PLANE
-! XEP,YEP,ZEP = COMPONENTS OF THE VECTOR EP FROM E TO P
-! XW,YW,ZW =    COMPONENTS OF THE VECTOR W FROM O TO THE
-!                 PROJECTION OF P ONTO THE PLANE
-!
-!   THE COMMON BLOCK IS USED TO SAVE LOCAL PARAMETERS
-! BETWEEN CALLS.
-!
-      IF (ISW .NE. 1) GO TO 1
-      ISW = 0
-!
-! SET THE COORDINATES OF E TO LOCAL VARIABLES, COMPUTE
-!   OE = E - O AND OES
-!
-      XE = EX
-      YE = EY
-      ZE = EZ
-      XOE = XE - OX
-      YOE = YE - OY
-      ZOE = ZE - OZ
-      OES = XOE*XOE + YOE*YOE + ZOE*ZOE
-      IF (OES .EQ. 0.) GO TO 2
-!
-! COMPUTE S = (OE,V)/OES AND VN = V - S*OE
-!
-      S = (XOE*VX + YOE*VY + ZOE*VZ)/OES
-      XV = VX - S*OEX
-      YV = VY - S*OEY
-      ZV = VZ - S*OEZ
-!
-! NORMALIZE VN TO A UNIT VECTOR
-!
-      SC = XV*XV + YV*YV + ZV*ZV
-      IF (SC .EQ. 0.) GO TO 3
-      SC = 1./SQRT(SC)
-      XV = SC*XV
-      YV = SC*YV
-      ZV = SC*ZV
-!
-! COMPUTE HN = VN X OE (NORMALIZED)
-!
-      XH = YV*ZOE - YOE*ZV
-      YH = XOE*ZV - XV*ZOE
-      ZH = XV*YOE - XOE*YV
-      SC = 1./SQRT(XH*XH + YH*YH + ZH*ZH)
-      XH = SC*XH
-      YH = SC*YH
-      ZH = SC*ZH
-!
-! COMPUTE EP = P - E, S = (OE,EP)/OES, AND W = OE - EP/S
-!
-    1 XEP = PX - XE
-      YEP = PY - YE
-      ZEP = PZ - ZE
-      S = (XOE*XEP + YOE*YEP + ZOE*ZEP)/OES
-      IF (S .GE. 0.) GO TO 2
-      XW = XOE - XEP/S
-      YW = YOE - YEP/S
-      ZW = ZOE - ZEP/S
-!
-! MAP W INTO X = (W,HN), Y = (W,VN)
-!
-      X = XW*XH + YW*YH + ZW*ZH
-      Y = XW*XV + YW*YV + ZW*ZV
-      RETURN
-!
-! (OE,EP) .GE. 0.
-!
-    2 IER = 1
-      RETURN
-!
-! O, E, AND O+V ARE COLLINEAR
-!
-    3 IER = 2
       RETURN
       END
       SUBROUTINE QSORT (N,X, IND)
@@ -5114,7 +4934,7 @@
 !***********************************************************
 !
       INTEGER I
-      DOUBLE PRECISION    C1, C2, C3, SUM, U1(3), U2(3), U3(3), U1N, &
+      DOUBLE PRECISION    C1,C2,C3, SUMM, U1(3), U2(3), U3(3), U1N, &
               U2N, U3N, Q1(3), Q2(3), Q3(3), VAL, W, G(3),&
               DUM
 !
@@ -5125,7 +4945,7 @@
 !                 INTERPOLANTS.  C1 = 1 ON THE EDGE OPPOSITE
 !                 V1 AND C1 = 0 ON THE OTHER EDGES.  SIMI-
 !                 LARLY FOR C2 AND C3.  C1+C2+C3 = 1.
-! SUM =         QUANTITY USED TO NORMALIZE C1, C2, AND C3
+! SUMM =         QUANTITY USED TO NORMALIZE C1, C2, AND C3
 ! U1,U2,U3 =    POINTS ON THE BOUNDARY OF THE PLANAR TRIAN-
 !                 GLE AND LYING ON THE LINES CONTAINING PP
 !                 AND THE VERTICES.  U1 IS OPPOSITE V1, ETC.
@@ -5147,8 +4967,8 @@
       C1 = B2*B3
       C2 = B3*B1
       C3 = B1*B2
-      SUM = C1 + C2 + C3
-      IF (SUM .GT. 0.) GO TO 2
+      SUMM = C1 + C2 + C3
+      IF (SUMM .GT. 0.) GO TO 2
 !
 ! P COINCIDES WITH A VERTEX
 !
@@ -5160,9 +4980,9 @@
 !
 ! NORMALIZE C1, C2, AND C3
 !
-    2 C1 = C1/SUM
-      C2 = C2/SUM
-      C3 = C3/SUM
+    2 C1 = C1/SUMM
+      C2 = C2/SUMM
+      C3 = C3/SUMM
 !
 ! COMPUTE (U1,U2,U3) AND (U1N,U2N,U3N)
 !
