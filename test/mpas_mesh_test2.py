@@ -11,9 +11,9 @@ import time
 
 # MPAS model mesh files from
 # https://mpas-dev.github.io/atmosphere/atmosphere_meshes.html
-#mesh_filename = 'x1.2562.grid.nc' # 480 km mesh
+mesh_filename = 'x1.2562.grid.nc' # 480 km mesh
 #mesh_filename = 'x1.40962.grid.nc' # 120 km mesh
-mesh_filename = 'x1.2621442.grid.nc' # 15 km mesh
+#mesh_filename = 'x1.2621442.grid.nc' # 15 km mesh
 mesh_nc = Dataset(mesh_filename)
 lats = mesh_nc.variables['latCell'][:]
 print 'min/max lats:',lats.min(), lats.max()
