@@ -115,10 +115,14 @@ class stripack(object):
 given mesh points (lons,lats in radians) define triangulation.
 n is size of input mesh (length of 1-d arrays lons and lats).
 
+Same as trintrp, but uses improved triangulation routines
+from TOMS 772, and has no 'reorder' kwarg.
+
 Algorithm:
- R. J. Renka, "ALGORITHM 772:  Interpolation on the Surface of a
- Sphere", ACM Trans. Math. Software, Vol. 10, No. 4, December 1984,
- pp. 437-439."""
+ R. J. Renka, "ALGORITHM 772: STRIPACK: Delaunay triangulation
+ and Voronoi diagram on the surface of a sphere"
+ ACM Trans. Math. Software, Volume 23 Issue 3, Sept. 1997
+ pp 416-434."""
         if len(lons.shape) != 1 or len(lats.shape) != 1:
             raise ValueError('lons and lats must be 1d')
         lats = lats.astype(np.float64,copy=False)
