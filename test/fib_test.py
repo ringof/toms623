@@ -41,10 +41,10 @@ print 'triangulation of', len(lons),' points'
 tri = trintrp(lons, lats)
 print 'triangulation took',time.clock()-t1,' secs'
 
-nlons = 360; nlats = nlons/2 # 1 degree output mesh
+nlons = 360; nlats = nlons/2 + 1 # 1 degree output mesh
 delta = 360./nlons
 olons = delta*np.arange(nlons)
-olats = -90.0 + 0.5*delta + delta*np.arange(nlats)
+olats = -90.0 + delta*np.arange(nlats)
 olons = np.radians(olons);  olats = np.radians(olats)
 olons, olats = np.meshgrid(olons, olats)
 
