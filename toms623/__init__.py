@@ -19,6 +19,9 @@ Algorithm:
             raise ValueError('lons and lats must be 1d')
         lats = lats.astype(np.float64,copy=False)
         lons = lons.astype(np.float64,copy=False)
+        if (np.abs(lats)).max() > 0.5*np.pi or\
+           (np.abs(lons)).max() > 2.*np.pi:
+            raise ValueError('lons, lats must be in radians')
         npts = len(lons)
         if len(lats) != npts:
             raise ValueError('lons and lats must have same length')
@@ -58,6 +61,9 @@ order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
         olons1 = (olons.astype(np.float64,copy=False)).ravel()
         olats1 = (olats.astype(np.float64,copy=False)).ravel()
         nptso = len(olons1)
+        if (np.abs(olats1)).max() > 0.5*np.pi or\
+           (np.abs(olons1)).max() > 2.*np.pi:
+            raise ValueError('lons, lats must be in radians')
         if len(olats1) != nptso:
             raise ValueError('lons and lats must have same length')
         if len(data) != self.npts:
