@@ -44,11 +44,13 @@ Algorithm:
         self.lons = lons; self.lats = lats; self.npts = npts
         self.x = x; self.y = y; self.z = z
         self.iadj = iadj; self.iend = iend
-    def interp_linear(self,olons,olats,data):
+    def interp(self,olons,olats,data,order=1):
         """
-given a triangulation, perform linear interpolation on
+given a triangulation, perform interpolation on
 oints olons,olats (in radians), return result in data.
-olons, olats can be 1d or 2d (output data array has same shape as olats,lons)"""
+olons, olats can be 1d or 2d (output data array has same shape as olats,lons).
+order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
+1 (linear), or 3 (hermite cubic). Default is linear."""
         shapeout = olons.shape
         if len(shapeout) not in [1,2]:
             raise ValueError('olons,olats must be 1d or 2d')
@@ -60,55 +62,35 @@ olons, olats can be 1d or 2d (output data array has same shape as olats,lons)"""
             raise ValueError('input data wrong size')
         # reorder input data based on sorting of nodes.
         data_reordered = data[self.ind].astype(np.float64)
-        odata,ierr = \
-        _toms623.intrpc0_n(olats1.astype(np.float64),olons1.astype(np.float64),\
-                     self.x, self.y, self.z, data_reordered,\
-                     self.iadj,self.iend,self.npts,nptso)
+        if order == '0':
+            odata,ierr = \
+            _toms623.intrpnn_n(olats1.astype(np.float64),olons1.astype(np.float64),\
+                         self.x, self.y, self.z, data_reordered,\
+                         self.iadj,self.iend,self.npts,nptso)
+        elif order == '1':
+            odata,ierr = \
+            _toms623.intrpc0_n(olats1.astype(np.float64),olons1.astype(np.float64),\
+                         self.x, self.y, self.z, data_reordered,\
+                         self.iadj,self.iend,self.npts,nptso)
+        elif order == '3':
+            odata,ierr = \
+            _toms623.intrpc1_n(olats1.astype(np.float64),olons1.astype(np.float64),\
+                         self.x, self.y, self.z, data_reordered,\
+                         self.iadj,self.iend,self.npts,nptso)
+        else:
+            raise ValueError('order must be 0,1 or 3')
         if ierr != 0:
             raise ValueError('ierr = %s in intrpc0_n' % ierr)
         return odata.reshape(shapeout)
-    def interp_cubic(self,olons,olats,data):
-        """
-given a triangulation, perform hermite cubic interpolation on
-points olons,olats (in radians), return result in data.
-olons, olats can be 1d or 2d (output data array has same shape as olats,lons)"""
-        shapeout = olons.shape
-        if len(shapeout) not in [1,2]:
-            raise ValueError('olons,olats must be 1d or 2d')
-        olons1 = olons.ravel(); olats1 = olats.ravel()
-        nptso = len(olons1)
-        if len(olats1) != nptso:
-            raise ValueError('lons and lats must have same length')
-        if len(data) != self.npts:
-            raise ValueError('input data wrong size')
-        # reorder input data based on sorting of nodes.
-        data_reordered = data[self.ind].astype(np.float64)
-        odata,ierr = \
-        _toms623.intrpc1_n(olats1.astype(np.float64),olons1.astype(np.float64),\
-                     self.x, self.y, self.z, data_reordered,\
-                     self.iadj,self.iend,self.npts,nptso)
-        if ierr != 0:
-            raise ValueError('ierr = %s in intrpc1_n' % ierr)
-        return odata.reshape(shapeout)
     def interp_nn(self,olons,olats,data):
         """
-given a triangulation, perform nearest neighbor interpolation on
-points olons,olats (in radians), return result in data.
-olons, olats can be 1d or 2d (output data array has same shape as olats,lons)"""
-        shapeout = olons.shape
-        if len(shapeout) not in [1,2]:
-            raise ValueError('olons,olats must be 1d or 2d')
-        olons1 = olons.flatten(); olats1 = olats.flatten()
-        nptso = len(olons1)
-        if len(olats1) != nptso:
-            raise ValueError('lons and lats must have same length')
-        if len(data) != self.npts:
-            raise ValueError('input data wrong size')
-        data_reordered = data[self.ind].astype(np.float64)
-        odata,ierr = \
-        _toms623.intrpnn_n(olats1.astype(np.float64),olons1.astype(np.float64),\
-                     self.x, self.y, self.z, data_reordered,\
-                     self.iadj,self.iend,self.npts,nptso)
-        if ierr != 0:
-            raise ValueError('ierr = %s in intrpnn_n' % ierr)
-        return odata.reshape(shapeout)
+same as interp(olons,olats,data,order='0')"""
+        return self.interp(olons,olats,data,order='0')
+    def interp_linear(self,olons,olats,data):
+        """
+same as interp(olons,olats,data,order='1')"""
+        return self.interp(olons,olats,data,order='1')
+    def interp_cubic(self,olons,olats,data):
+        """
+same as interp(olons,olats,data,order='3')"""
+        return self.interp(olons,olats,data,order='3')
