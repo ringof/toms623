@@ -38,8 +38,8 @@ olons = np.radians(olons);  olats = np.radians(olats)
 olons, olats = np.meshgrid(olons, olats)
 
 t1 = time.clock()
-latlon_data = tri.interp_linear(olons,olats,icos_data)
-print 'linear interp took',time.clock()-t1,' secs'
+latlon_data = tri.interp(olons,olats,icos_data,order=1)
+print 'interpolation took',time.clock()-t1,' secs'
 
 latlon_datax = np.cos(nexp*olons)*np.sin(0.5*olons)**nexp*np.cos(olats)**nexp +\
 np.sin(olats)**nexp

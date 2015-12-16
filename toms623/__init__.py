@@ -64,17 +64,17 @@ order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
             raise ValueError('input data wrong size')
         # reorder input data based on sorting of nodes.
         data_reordered = data[self.ind].astype(np.float64,copy=False)
-        if order == '0':
+        if order == 0:
             odata,ierr = \
             _toms623.intrpnn_n(olats1, olons1,\
                          self.x, self.y, self.z, data_reordered,\
                          self.iadj,self.iend,self.npts,nptso)
-        elif order == '1':
+        elif order == 1:
             odata,ierr = \
             _toms623.intrpc0_n(olats1, olons1,\
                          self.x, self.y, self.z, data_reordered,\
                          self.iadj,self.iend,self.npts,nptso)
-        elif order == '3':
+        elif order == 3:
             odata,ierr = \
             _toms623.intrpc1_n(olats1, olons1,\
                          self.x, self.y, self.z, data_reordered,\
@@ -86,13 +86,13 @@ order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
         return odata.reshape(shapeout)
     def interp_nn(self,olons,olats,data):
         """
-same as interp(olons,olats,data,order='0')"""
-        return self.interp(olons,olats,data,order='0')
+same as interp(olons,olats,data,order=0)"""
+        return self.interp(olons,olats,data,order=0)
     def interp_linear(self,olons,olats,data):
         """
-same as interp(olons,olats,data,order='1')"""
-        return self.interp(olons,olats,data,order='1')
+same as interp(olons,olats,data,order=1)"""
+        return self.interp(olons,olats,data,order=1)
     def interp_cubic(self,olons,olats,data):
         """
-same as interp(olons,olats,data,order='3')"""
-        return self.interp(olons,olats,data,order='3')
+same as interp(olons,olats,data,order=3)"""
+        return self.interp(olons,olats,data,order=3)
