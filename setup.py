@@ -1,8 +1,11 @@
 from numpy.distutils.core  import setup, Extension
 
 # interface for Renka's algorithm 623 fortran code
-ext = Extension(name  = '_toms623',
+ext623 = Extension(name  = '_toms623',
                 sources       = ['_toms623.pyf','_toms623.f90'])
+ext773 = Extension(name  = '_stripack',
+                sources       = ['_stripack.pyf','_stripack.f'])
+
 
 if __name__ == "__main__":
     setup(name = 'toms623',
@@ -10,6 +13,6 @@ if __name__ == "__main__":
           description       = "Python interface to TOMS 623 fortran code",
           author            = "Jeff Whitaker",
           author_email      = "jeffrey.s.whitaker@noaa.gov",
-          ext_modules       = [ext],
+          ext_modules       = [ext623,ext773],
           packages          = ['toms623'],
           )
