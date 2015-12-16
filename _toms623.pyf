@@ -3,55 +3,6 @@
 
 python module _toms623 ! in 
     interface  ! in :_toms623
-        subroutine intrnn(n,plat,plon,x,y,z,w,iadj,iend,ist,pw,ier) ! in :_toms623:_toms623.f90
-            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
-            double precision :: plat
-            double precision :: plon
-            double precision dimension(n) :: x
-            double precision dimension(n),depend(n) :: y
-            double precision dimension(n),depend(n) :: z
-            double precision dimension(n),depend(n) :: w
-            integer dimension(1) :: iadj
-            integer dimension(n),depend(n) :: iend
-            integer :: ist
-            double precision :: pw
-            integer :: ier
-        end subroutine intrnn
-        subroutine intrc0(n,plat,plon,x,y,z,w,iadj,iend,ist,pw,ier) ! in :_toms623:_toms623.f90
-            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
-            double precision :: plat
-            double precision :: plon
-            double precision dimension(n) :: x
-            double precision dimension(n),depend(n) :: y
-            double precision dimension(n),depend(n) :: z
-            double precision dimension(n),depend(n) :: w
-            integer dimension(1) :: iadj
-            integer dimension(n),depend(n) :: iend
-            integer :: ist
-            double precision :: pw
-            integer :: ier
-        end subroutine intrc0
-        subroutine intrc1(n,plat,plon,x,y,z,w,iadj,iend,iflag,grad,ist,pw,ier) ! in :_toms623:_toms623.f90
-            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
-            double precision :: plat
-            double precision :: plon
-            double precision dimension(n) :: x
-            double precision dimension(n),depend(n) :: y
-            double precision dimension(n),depend(n) :: z
-            double precision dimension(n),depend(n) :: w
-            integer dimension(1) :: iadj
-            integer dimension(n),depend(n) :: iend
-            integer :: iflag
-            double precision dimension(3,n),depend(n) :: grad
-            integer :: ist
-            double precision :: pw
-            integer :: ier
-        end subroutine intrc1
-        subroutine permut(n,ip,a) ! in :_toms623:_toms623.f90
-            integer, optional,check(len(ip)>=n),depend(ip) :: n=len(ip)
-            integer dimension(n) :: ip
-            double precision dimension(n),depend(n) :: a
-        end subroutine permut
         subroutine reordr(n,iflag,a,b,c,d,ind) ! in :_toms623:_toms623.f90
             integer, intent(in) :: n
             integer, intent(in) :: iflag
@@ -69,21 +20,6 @@ python module _toms623 ! in
             double precision dimension(n), intent(out) :: y
             double precision dimension(n), intent(out) :: z
         end subroutine trans
-        subroutine trfind(nst,p,x,y,z,iadj,iend,b1,b2,b3,i1,i2,i3) ! in :_toms623:_toms623.f90
-            integer :: nst
-            double precision dimension(3) :: p
-            double precision dimension(1) :: x
-            double precision dimension(1) :: y
-            double precision dimension(1) :: z
-            integer dimension(1) :: iadj
-            integer dimension(1) :: iend
-            double precision :: b1
-            double precision :: b2
-            double precision :: b3
-            integer :: i1
-            integer :: i2
-            integer :: i3
-        end subroutine trfind
         subroutine trmesh(n,x,y,z,iadj,iend,ier) ! in :_toms623:_toms623.f90
             integer, intent(in) :: n
             double precision dimension(n), intent(in) :: x
@@ -93,60 +29,32 @@ python module _toms623 ! in
             integer dimension(n), intent(out) :: iend
             integer, intent(out) :: ier
         end subroutine trmesh
-        subroutine gradg(n,x,y,z,w,iadj,iend,eps,nit,grad,ier) ! in :_toms623:_toms623.f90
-            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
-            double precision dimension(n) :: x
-            double precision dimension(n),depend(n) :: y
-            double precision dimension(n),depend(n) :: z
-            double precision dimension(n),depend(n) :: w
-            integer dimension(1) :: iadj
-            integer dimension(n),depend(n) :: iend
-            double precision :: eps
-            integer :: nit
-            double precision dimension(3,n),depend(n) :: grad
-            integer :: ier
-        end subroutine gradg
-        subroutine gradl(n,k,x,y,z,w,iadj,iend,g,ier) ! in :_toms623:_toms623.f90
-            integer, optional,check(len(x)>=n),depend(x) :: n=len(x)
-            integer :: k
-            double precision dimension(n) :: x
-            double precision dimension(n),depend(n) :: y
-            double precision dimension(n),depend(n) :: z
-            double precision dimension(n),depend(n) :: w
-            integer dimension(1) :: iadj
-            integer dimension(n),depend(n) :: iend
-            double precision dimension(3) :: g
-            integer :: ier
-        end subroutine gradl
-      subroutine intrpc1_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
-         integer, intent(in) :: npts, nptso
-         integer, intent(out) :: ierr
-         double precision, intent(in), dimension(nptso) :: olats,olons
-         double precision, intent(in), dimension(npts) :: x,y,z,data
-         double precision, intent(out), dimension(nptso) :: odata
-         integer, intent(in), dimension(npts) :: iend
-         integer, intent(in), dimension(6*(npts-1)) :: iadj
-      end subroutine intrpc1_n
-      subroutine intrpc0_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
-         integer, intent(in) :: npts, nptso
-         integer, intent(out) :: ierr
-         double precision, intent(in), dimension(nptso) :: olats,olons
-         double precision, intent(in), dimension(npts) :: x,y,z,data
-         double precision, intent(out), dimension(nptso) :: odata
-         integer, intent(in), dimension(npts) :: iend
-         integer, intent(in), dimension(6*(npts-1)) :: iadj
-      end subroutine intrpc0_n
-      subroutine intrpnn_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
-         integer, intent(in) :: npts, nptso
-         integer, intent(out) :: ierr
-         double precision, intent(in), dimension(nptso) :: olats,olons
-         double precision, intent(in), dimension(npts) :: x,y,z,data
-         double precision, intent(out), dimension(nptso) :: odata
-         integer, intent(in), dimension(npts) :: iend
-         integer, intent(in), dimension(6*(npts-1)) :: iadj
-      end subroutine intrpnn_n
+        subroutine intrpc1_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+           integer, intent(in) :: npts, nptso
+           integer, intent(out) :: ierr
+           double precision, intent(in), dimension(nptso) :: olats,olons
+           double precision, intent(in), dimension(npts) :: x,y,z,data
+           double precision, intent(out), dimension(nptso) :: odata
+           integer, intent(in), dimension(npts) :: iend
+           integer, intent(in), dimension(6*(npts-1)) :: iadj
+        end subroutine intrpc1_n
+        subroutine intrpc0_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+           integer, intent(in) :: npts, nptso
+           integer, intent(out) :: ierr
+           double precision, intent(in), dimension(nptso) :: olats,olons
+           double precision, intent(in), dimension(npts) :: x,y,z,data
+           double precision, intent(out), dimension(nptso) :: odata
+           integer, intent(in), dimension(npts) :: iend
+           integer, intent(in), dimension(6*(npts-1)) :: iadj
+        end subroutine intrpc0_n
+        subroutine intrpnn_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+           integer, intent(in) :: npts, nptso
+           integer, intent(out) :: ierr
+           double precision, intent(in), dimension(nptso) :: olats,olons
+           double precision, intent(in), dimension(npts) :: x,y,z,data
+           double precision, intent(out), dimension(nptso) :: odata
+           integer, intent(in), dimension(npts) :: iend
+           integer, intent(in), dimension(6*(npts-1)) :: iadj
+        end subroutine intrpnn_n
     end interface 
 end python module _toms623
-
-! This file was auto-generated with f2py (version:2).
-! See http://cens.ioc.ee/projects/f2py2e/
