@@ -39,7 +39,8 @@ olons = np.radians(olons);  olats = np.radians(olats)
 olons, olats = np.meshgrid(olons, olats)
 
 t1 = time.clock()
-latlon_data = tri.interp(olons,olats,icos_data,order=1)
+order = 1 # can be 0 (nearest neighbor), 1 (linear) or 3 (cubic)
+latlon_data = tri.interp(olons,olats,icos_data,order=order)
 print 'interpolation took',time.clock()-t1,' secs'
 
 latlon_datax = test_func(olons,olats)
@@ -55,7 +56,7 @@ if has_matplotlib:
     m.drawcoastlines()
     m.drawmapboundary()
     m.contourf(x,y,latlon_data,15)
-    plt.title('interpolated field')
+    plt.title('interpolated field order=%s' % order)
     m.colorbar()
     fig.add_subplot(1,2,2)
     m.drawcoastlines()
