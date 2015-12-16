@@ -2,7 +2,7 @@ import _toms623
 import numpy as np
 
 class trintrp(object):
-    def __init__(self, lons, lats,reorder = None):
+    def __init__(self, lons, lats, reorder = None):
         """
 given mesh points (lons,lats in radians) define triangulation.
 n is size of input mesh (length of 1-d arrays lons and lats).
@@ -19,9 +19,12 @@ Algorithm:
             raise ValueError('lons and lats must be 1d')
         lats = lats.astype(np.float64,copy=False)
         lons = lons.astype(np.float64,copy=False)
-        if (np.abs(lats)).max() > 0.5*np.pi or\
-           (np.abs(lons)).max() > 2.*np.pi:
-            raise ValueError('lons, lats must be in radians')
+        if (np.abs(lons)).max() > 2.*np.pi:
+            msg="lons must be in radians (-2*pi <= lon <= 2*pi)"
+            raise ValueError(msg)
+        if (np.abs(lats)).max() > 0.5*np.pi:
+            msg="lats must be in radians (-pi/2 <= lat <= pi/2)"
+            raise ValueError(msg)
         npts = len(lons)
         if len(lats) != npts:
             raise ValueError('lons and lats must have same length')
@@ -61,9 +64,12 @@ order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
         olons1 = (olons.astype(np.float64,copy=False)).ravel()
         olats1 = (olats.astype(np.float64,copy=False)).ravel()
         nptso = len(olons1)
-        if (np.abs(olats1)).max() > 0.5*np.pi or\
-           (np.abs(olons1)).max() > 2.*np.pi:
-            raise ValueError('lons, lats must be in radians')
+        if (np.abs(olons1)).max() > 2.*np.pi:
+            msg="lons must be in radians (-2*pi <= lon <= 2*pi)"
+            raise ValueError(msg)
+        if (np.abs(olats1)).max() > 0.5*np.pi:
+            msg="lats must be in radians (-pi/2 <= lat <= pi/2)"
+            raise ValueError(msg)
         if len(olats1) != nptso:
             raise ValueError('lons and lats must have same length')
         if len(data) != self.npts:
