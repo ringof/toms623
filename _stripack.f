@@ -5822,8 +5822,8 @@ C
         X0 = R11*X(N0) + R12*Y(N0)
         Y0 = R21*X(N0) + R22*Y(N0) + R23*Z(N0)
         IF (X0*X0 + Y0*Y0 .GT. WRS) GO TO 3
-	LPL = LEND(N0)
-	LP = LPL
+        LPL = LEND(N0)
+        LP = LPL
 C
 C Loop on neighbors N1 of N0.  LPL points to the last
 C   neighbor of N0.  Copy the components of N1 into P.
