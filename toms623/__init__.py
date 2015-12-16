@@ -17,17 +17,18 @@ Algorithm:
  pp. 437-439."""
         if len(lons.shape) != 1 or len(lats.shape) != 1:
             raise ValueError('lons and lats must be 1d')
+        lats = lats.astype(np.float64,copy=False)
+        lons = lons.astype(np.float64,copy=False)
         npts = len(lons)
         if len(lats) != npts:
             raise ValueError('lons and lats must have same length')
         # compute cartesian coords on unit sphere.
-        x,y,z = _toms623.trans(lats.astype(np.float64),\
-                lons.astype(np.float64),npts)
+        x,y,z = _toms623.trans(lats,lons,npts)
         # reorder the coordinates by latitude.
         if reorder == 'lat':
-            dummy = lats.astype(np.float64)
+            dummy = lats.copy()
         elif reorder == 'lon':
-            dummy = lons.astype(np.float64)
+            dummy = lons.copy()
         elif reorder is None:
             dummy = None
         else:
@@ -54,27 +55,28 @@ order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
         shapeout = olons.shape
         if len(shapeout) not in [1,2]:
             raise ValueError('olons,olats must be 1d or 2d')
-        olons1 = olons.ravel(); olats1 = olats.ravel()
+        olons1 = (olons.astype(np.float64,copy=False)).ravel()
+        olats1 = (olats.astype(np.float64,copy=False)).ravel()
         nptso = len(olons1)
         if len(olats1) != nptso:
             raise ValueError('lons and lats must have same length')
         if len(data) != self.npts:
             raise ValueError('input data wrong size')
         # reorder input data based on sorting of nodes.
-        data_reordered = data[self.ind].astype(np.float64)
+        data_reordered = data[self.ind].astype(np.float64,copy=False)
         if order == '0':
             odata,ierr = \
-            _toms623.intrpnn_n(olats1.astype(np.float64),olons1.astype(np.float64),\
+            _toms623.intrpnn_n(olats1, olons1,\
                          self.x, self.y, self.z, data_reordered,\
                          self.iadj,self.iend,self.npts,nptso)
         elif order == '1':
             odata,ierr = \
-            _toms623.intrpc0_n(olats1.astype(np.float64),olons1.astype(np.float64),\
+            _toms623.intrpc0_n(olats1, olons1,\
                          self.x, self.y, self.z, data_reordered,\
                          self.iadj,self.iend,self.npts,nptso)
         elif order == '3':
             odata,ierr = \
-            _toms623.intrpc1_n(olats1.astype(np.float64),olons1.astype(np.float64),\
+            _toms623.intrpc1_n(olats1, olons1,\
                          self.x, self.y, self.z, data_reordered,\
                          self.iadj,self.iend,self.npts,nptso)
         else:
