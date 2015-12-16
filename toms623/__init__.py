@@ -164,11 +164,10 @@ order of interpolation specified by 'order' kwarg, can be 0 (nearest neighbor),
         if len(data) != self.npts:
             raise ValueError('input data wrong size')
         if order == 0:
-            raise NotImplementedError
-            #odata,ierr = \
-            #_stripack.intrpnn_n(olats1, olons1,\
-            #             self.x, self.y, self.z, data_reordered,\
-            #             self.iadj,self.iend,self.npts,nptso)
+            odata,ierr = \
+            _stripack.intrpnn_n(olats1, olons1,\
+                         self.x, self.y, self.z, data.astype(np.float64),\
+                         self.lst,self.lptr,self.lend,self.npts,nptso)
         elif order == 1:
             odata,ierr = \
             _stripack.intrpc0_n(olats1, olons1,\

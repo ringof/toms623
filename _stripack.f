@@ -8768,6 +8768,130 @@ C
       ENDIF
       RETURN
       END
+      SUBROUTINE INTRNN (N,PLAT,PLON,X,Y,Z,W,LIST,LPTR,LEND, 
+     .                   IST,PW,IER)
+      INTEGER N, LIST(*),LPTR(*), LEND(N), IST, IER
+      DOUBLE PRECISION  PLAT, PLON, X(N), Y(N), Z(N), W(N), PW
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+! (hacked version of INTRC0, jeff whitaker 09/2010)
+!
+!   GIVEN A TRIANGULATION OF A SET OF NODES ON THE UNIT
+! SPHERE, ALONG WITH DATA VALUES AT THE NODES, THIS SUB-
+! ROUTINE COMPUTES THE VALUE AT A POINT P BY NEAREST
+! NEIGHBOR INTERPOLATION.
+!
+! INPUT PARAMETERS -     N - NUMBER OF NODES IN THE TRIANGU-
+!                            LATION.  N .GE. 3.
+!
+!                PLAT,PLON - LATITUDE AND LONGITUDE OF P IN
+!                            RADIANS.
+!
+!                    X,Y,Z - VECTORS CONTAINING CARTESIAN
+!                            COORDINATES OF THE NODES.
+!
+!                        W - VECTOR CONTAINING DATA VALUES
+!                            AT THE NODES.  W(I) IS ASSOCI-
+!                            ATED WITH (X(I),Y(I),Z(I)) FOR
+!                            I = 1,...,N.
+!
+!                IADJ,IEND - TRIANGULATION DATA STRUCTURE
+!                            CREATED BY SUBROUTINE TRMESH.
+!
+!                      IST - INDEX OF THE STARTING NODE IN
+!                            THE SEARCH FOR A TRIANGLE CON-
+!                            TAINING P.  1 .LE. IST .LE. N.
+!                            THE OUTPUT VALUE OF IST FROM A
+!                            PREVIOUS CALL MAY BE A GOOD
+!                            CHOICE.
+!
+! INPUT PARAMETERS OTHER THAN IST ARE NOT ALTERED BY THIS
+!   ROUTINE.
+!
+! OUTPUT PARAMETERS - IST - INDEX OF ONE OF THE VERTICES OF
+!                           THE TRIANGLE CONTAINING P (OR
+!                           NEAREST P) UNLESS IER = -1 OR
+!                           IER = -2.
+!
+!                      PW - VALUE OF THE INTERPOLATORY
+!                           FUNCTION AT P IF IER .LE. 0.
+!
+!                     IER - ERROR INDICATOR
+!                           IER = 0 IF INTERPOLATION WAS
+!                                   PERFORMED SUCCESSFULLY.
+!                           IER = -3 IF POINT IS EXTERIOR
+!                                    TO TRIANGULATION.
+!                           IER = -1 IF N .LT. 3 OR IST IS
+!                                    OUT OF RANGE.
+!                           IER = -2 IF THE NODES ARE COL-
+!                                    LINEAR.
+!
+! MODULES REFERENCED BY INTRNN - TRFIND
+!
+! INTRINSIC FUNCTIONS CALLED BY INTRNN - COS, SIN
+!
+!***********************************************************
+!
+      INTEGER I1, I2, I3, I(1)
+      DOUBLE PRECISION    P(3), P1(3), P2(3), P3(3), B1,B2,B3, 
+     .        DIST(3), ARCLEN
+      IF (N .LT. 3  .OR.  IST .LT. 1  .OR.  IST .GT. N)
+     .    GO TO 11
+C
+C Transform (PLAT,PLON) to Cartesian coordinates.
+C
+      P(1) = COS(PLAT)*COS(PLON)
+      P(2) = COS(PLAT)*SIN(PLON)
+      P(3) = SIN(PLAT)
+C
+C Find the vertex indexes of a triangle containing P.
+C
+      CALL TRFIND(IST,P,N,X,Y,Z,LIST,LPTR,LEND, B1,B2,B3,
+     .            I1,I2,I3)
+      IF (I1 .EQ. 0) GO TO 12
+      IST = I1
+      IF (I3 .LE. 0) GO TO 13
+!
+! P IS CONTAINED IN THE TRIANGLE (I1,I2,I3).  STORE THE
+!  VERTEX COORDINATES IN LOCAL VARIABLES
+!
+      P1(1) = X(I1)
+      P1(2) = Y(I1)
+      P1(3) = Z(I1)
+      P2(1) = X(I2)
+      P2(2) = Y(I2)
+      P2(3) = Z(I2)
+      P3(1) = X(I3)
+      P3(2) = Y(I3)
+      P3(3) = Z(I3)
+      dist(1) =  ARCLEN (P,P1)
+      dist(2) =  ARCLEN (P,P2)
+      dist(3) =  ARCLEN (P,P3)
+      I = minloc(dist)
+      if (i(1) .eq. 1) pw = w(i1)
+      if (i(1) .eq. 2) pw = w(i2)
+      if (i(1) .eq. 3) pw = w(i3)
+      IER = 0
+      RETURN
+C
+C N or IST is outside its valid range.
+C
+   11 IER = -1
+      RETURN
+C
+C Collinear nodes.
+C
+   12 IER = -2
+      RETURN
+C
+   13 IER = 1
+      RETURN
+      END
       SUBROUTINE INTRC0 (N,PLAT,PLON,X,Y,Z,W,LIST,LPTR,
      .                   LEND, IST, PW,IER)
       INTEGER N, LIST(*), LPTR(*), LEND(N), IST, IER
@@ -11671,3 +11795,26 @@ C
          endif
       enddo
       end subroutine intrpc0_n
+      subroutine intrpnn_n(npts,nptso,olats,olons,x,y,z,datain,lst,
+     .                     lptr,lend,odata,ierr)
+      integer, intent(in) :: npts, nptso
+      integer, intent(out) :: ierr
+      double precision, intent(in), dimension(nptso) :: olats,olons
+      double precision, intent(in), dimension(npts) :: datain,x,y,z
+      double precision, intent(out), dimension(nptso) :: odata
+      integer, intent(in), dimension(npts) :: lend
+      integer, intent(in), dimension(6*(npts-2)) :: lst,lptr
+      integer n,ierr1,ist
+      ist = 1
+      ierr = 0
+      do n=1,nptso
+         call intrnn(npts,olats(n),olons(n),x,y,z,datain,lst,lptr,
+     .               lend,ist,odata(n),ierr1)
+         if (ierr1 .ne. 0) then
+           !print *,n,'warning: ierr = ',ierr1,' in intrc0_n'
+           !print *,olats(n), olons(n), npts
+           !stop
+           ierr = ierr + ierr1
+         endif
+      enddo
+      end subroutine intrpnn_n
