@@ -6,7 +6,7 @@ ext = Extension(name  = '_toms623',
 
 if __name__ == "__main__":
     setup(name = 'toms623',
-          version           = "0.0.1",
+          version           = "0.9",
           description       = "Python interface to TOMS 623 fortran code",
           author            = "Jeff Whitaker",
           author_email      = "jeffrey.s.whitaker@noaa.gov",
