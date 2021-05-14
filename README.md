@@ -1,6 +1,7 @@
 Python interface to ACM algorithms 623 and 772 fortran code for triangulation
 and interpolation on a sphere.
 
+To install, execute the following command in the directory of the library:
 ````
 sudo python3 setup.py install
 ````
