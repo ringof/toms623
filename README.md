@@ -1,6 +1,10 @@
 Python interface to ACM algorithms 623 and 772 fortran code for triangulation
 and interpolation on a sphere.
 
+````
+sudo python3 setup.py install
+````
+
 References:
  R. J. Renka, "ALGORITHM 623:  Interpolation on the Surface of a
  Sphere", ACM Trans. Math. Software, Vol. 10, No. 4, December 1984,
